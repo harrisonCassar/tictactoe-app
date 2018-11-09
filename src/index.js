@@ -7,10 +7,11 @@ function Square(props) {
     <button
     className="square"
     onClick={props.onClick}
+    style={{backgroundColor:props.bgColor}}
     >
       {props.value}
     </button>
-  );
+  )
 }
 
 class Board extends React.Component {
@@ -19,6 +20,7 @@ class Board extends React.Component {
     <Square
       value={this.props.squares[i]}
       onClick={() => this.props.onClick(i)}
+      bgColor={this.props.bgColor[i]}
     />);
   }
 
@@ -54,6 +56,9 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      bgColor: [{
+        bgColors: Array(9).fill('red'),
+      }],
     };
   }
 
@@ -89,7 +94,7 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const desc = move ? 'Go to move #' + move : 'Go to game start';
+      const desc = move ? `Go to move #${move}` : 'Go to game start';
 
       return (
         <li key={move}>
@@ -103,7 +108,7 @@ class Game extends React.Component {
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
-    } else if (currentstep == 9) {
+    } else if (currentstep === 9) {
       status = 'The game is a draw.'
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
@@ -113,8 +118,9 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
-          squares={current.squares}
+          squares={current.squares} //this.state.history[this.state.stepNumber]
           onClick={(i) => this.handleClick(i)}
+          bgColor={this.state.bgColor[]}
           />
         </div>
         <div className="game-info">
